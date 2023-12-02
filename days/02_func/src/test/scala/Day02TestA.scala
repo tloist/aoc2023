@@ -1,4 +1,4 @@
-import Cube._
+import Data._
 
 class Day02TestA extends munit.FunSuite {
   val example1: String =
@@ -8,33 +8,30 @@ class Day02TestA extends munit.FunSuite {
       |Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
       |Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green""".stripMargin
 
-  def cubeSet(input: (Cube, Int)*): CubeSet = CubeSet(input.toMap)
-
   test("Example 1 -- Parse Line 1"):
-    val game = parseGame(example1.split('\n').head)
+    val game = Parse.game(example1.split('\n').head)
     assertEquals(game.id, 1)
     assertEquals(game.sets.size, 3)
-    assertEquals(game.sets(0), cubeSet(Blue -> 3, Red -> 4))
-    assertEquals(game.sets(1), cubeSet(Red -> 1, Green -> 2, Blue -> 6))
-    assertEquals(game.sets(2), cubeSet(Green -> 2))
+    assertEquals(game.sets(0), Map(Blue -> 3, Red -> 4))
+    assertEquals(game.sets(1), Map(Red -> 1, Green -> 2, Blue -> 6))
+    assertEquals(game.sets(2), Map(Green -> 2))
 
   test("Example 1 -- Parse all games"):
-    val games = parseGames(example1)
+    val games = Parse.games(example1)
     assertEquals(games.size, 5)
     assertEquals(games.last.id, 5)
 
-  val bagOfCubes: BagOfCubes = Map(Red -> 12, Green -> 13, Blue -> 14)
+  val exampleCount: CubeCount = Map(Red -> 12, Green -> 13, Blue -> 14)
 
   test("Example 1 -- All possible games are detected possible"):
-    val games = parseGames(example1)
+    val games = Parse.games(example1)
     val possibleGameNo = Set(1, 2, 5)
     games.filter(g => possibleGameNo(g.id)).foreach: game =>
-      assert(game.isPossibleWith(bagOfCubes))
+      assert(isPossible(game))
 
   test("Example 1 -- All impossible games are detected impossible"):
-    val games = parseGames(example1)
+    val games = Parse.games(example1)
     val impossible = Set(3, 4)
     games.filter(g => impossible(g.id)).foreach: game =>
-      assert(!game.isPossibleWith(bagOfCubes))
-
+      assert(!isPossible(game))
 }

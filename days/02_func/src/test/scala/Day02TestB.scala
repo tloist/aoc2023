@@ -1,7 +1,8 @@
-import Cube._
+import Data._
+import cats.syntax.all._
 
 class Day02TestB extends munit.FunSuite {
-  val games: Seq[Game] = parseGames(
+  val games: Seq[Game] = Parse.games(
     """Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
       |Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
       |Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
@@ -9,29 +10,27 @@ class Day02TestB extends munit.FunSuite {
       |Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green""".stripMargin)
 
   test("Game 1 -- Minimal bag"):
-    val fewest = games(0).fewestBagOfCube
+    val fewest = games(0).sets.combineAll
     assertEquals(fewest, Map(Red -> 4, Green -> 2, Blue -> 6))
-    assertEquals(fewest.power, 48)
+    assertEquals(power(fewest), 48)
 
   test("Game 2 -- Minimal bag"):
-    val fewest = games(1).fewestBagOfCube
+    val fewest = games(1).sets.combineAll
     assertEquals(fewest, Map(Red -> 1, Green -> 3, Blue -> 4))
-    assertEquals(fewest.power, 12)
+    assertEquals(power(fewest), 12)
 
   test("Game 3 -- Minimal bag"):
-    val fewest = games(2).fewestBagOfCube
+    val fewest = games(2).sets.combineAll
     assertEquals(fewest, Map(Red -> 20, Green -> 13, Blue -> 6))
-    assertEquals(fewest.power, 1560)
+    assertEquals(power(fewest), 1560)
 
   test("Game 4 -- Minimal bag"):
-    val fewest = games(3).fewestBagOfCube
+    val fewest = games(3).sets.combineAll
     assertEquals(fewest, Map(Red -> 14, Green -> 3, Blue -> 15))
-    assertEquals(fewest.power, 630)
+    assertEquals(power(fewest), 630)
 
   test("Game 5 -- Minimal bag"):
-    val fewest = games(4).fewestBagOfCube
+    val fewest = games(4).sets.combineAll
     assertEquals(fewest, Map(Red -> 6, Green -> 3, Blue -> 2))
-    assertEquals(fewest.power, 36)
-
-
+    assertEquals(power(fewest), 36)
 }
