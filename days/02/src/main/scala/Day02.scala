@@ -19,9 +19,9 @@ case class CubeSet(drawn: BagOfCubes):
     drawnAmount <= available.getOrElse(drawnColor, 0)
 
 case class Game(id: Int, sets: Seq[CubeSet]):
-  def isPossibleWith(available: BagOfCubes): Boolean = sets.forall(_.isPossibleWith(available))
-  def fewestBagOfCube: BagOfCubes = sets.foldLeft(Map.empty[Cube, Int]): (outerMinimal, cubeSet) =>
-    cubeSet.drawn.foldLeft(outerMinimal): (minimal, drawn) =>
+  def isPossibleWith(availableCubes: BagOfCubes): Boolean = sets.forall(_ isPossibleWith availableCubes)
+  def fewestBagOfCube: BagOfCubes = sets.foldLeft(Map.empty[Cube, Int]): (initial, cubeSet) =>
+    cubeSet.drawn.foldLeft(initial): (minimal, drawn) =>
       val (cube, amount) = drawn
       minimal + (cube -> max(amount, minimal.getOrElse(cube, 0)))
 
@@ -30,15 +30,15 @@ val cubePattern: Regex = """\s*(\d+) (\D+)\s*""".r
 
 def parseGame(line: String): Game = line match
   case gamePattern(no: String, sets: String) =>
-    Game(no.toInt, sets.split(';').map { setLine =>
-      CubeSet(setLine.split(',').map {
+    Game(no.toInt, sets.split(';').map: setLine =>
+      CubeSet(setLine.split(',').map:
         case cubePattern(amount: String, color: String) =>
           Cube.parse(color).map(_ -> amount.toInt) getOrElse (
             throw new IllegalArgumentException(s"Illegal color for cube specified!\n\t$color"))
         case cubeLine =>
           throw new IllegalArgumentException(s"Line does not represent a valid amount for a cube color!\n\t$cubeLine")
-      }.toMap)
-    })
+      .toMap)
+    )
   case _ => throw new IllegalArgumentException(s"Line does not represent a game!\n\t$line")
 
 def parseGames(input: String): Seq[Game] = input.split('\n').map(parseGame)
@@ -48,7 +48,7 @@ val games: Seq[Game] = parseGames(input)
 val availableCubes: BagOfCubes = Map(Red -> 12, Green -> 13, Blue -> 14)
 
 @main def part1(): Unit =
-  val possibleGames = games.filter(_.isPossibleWith(availableCubes))
+  val possibleGames = games.filter(_ isPossibleWith availableCubes)
   val result = possibleGames.map(_.id).sum
   println(s"The sum of the IDs of all possible games is $result")
 

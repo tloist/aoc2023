@@ -3,7 +3,8 @@ val scala3Version = "3.3.1"
 scalacOptions ++= (
   Seq(
     "-encoding", "UTF-8",
-    "-source", "future"
+    "-source", "future",
+    "-unchecked", "-deprecation"
   )
 )
 
