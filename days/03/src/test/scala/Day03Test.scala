@@ -1,5 +1,3 @@
-import geo.{Point2D, Vector2D}
-
 class Day03Test extends munit.FunSuite {
   val engineSchematic: EngineSchematic = EngineSchematic.fromRessource("example.txt")
 
