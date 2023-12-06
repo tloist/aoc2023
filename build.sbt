@@ -15,6 +15,7 @@ lazy val day02_oop = dayProjectWithPathSuffix( 2, "Cube Conundrum - OOP", "_oop"
 lazy val day02_func = dayProjectWithPathSuffix( 2, "Cube Conundrum - Functional", "_func")
 lazy val day03 = dayProject( 3, "Gear Ratios")
 lazy val day04 = dayProject( 4, "Scratchcards")
+lazy val day06 = dayProject( 6, "Wait For It")
 
 lazy val common = project
   .in(file("days/common"))
